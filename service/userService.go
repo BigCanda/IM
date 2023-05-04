@@ -89,13 +89,13 @@ func Register(c *gin.Context) {
 	})
 }
 
-// modifyPassword 使用gin.Context获取JSON数据
+// ModifyPassword 使用gin.Context获取JSON数据
 // @Summary 修改用户密码
 // @Tags 用户模块
 // @param password query string false "密码"
 // @Success 200 {string} json{"code", "message"}
 // @Router /user/modifyPassword [get] 路径：/user/modifyPassword 方法get
-func modifyPassword(c *gin.Context) {
+func ModifyPassword(c *gin.Context) {
 	user := models.UserBasics{}
 	password := c.Query("password")
 
