@@ -8,10 +8,10 @@ import (
 
 type UserBasics struct {
 	gorm.Model
-	Username      string
-	Password      string
-	PhoneNum      string
-	Email         string
+	Username      string `valid:"required"`
+	Password      string `valid:"required"`
+	PhoneNum      string `valid:"matches(^1[3-9]{1}\\d{9}$)"`
+	Email         string `valid:"email"`
 	Identity      string
 	ClientId      string
 	ClientPort    string
@@ -21,6 +21,13 @@ type UserBasics struct {
 	LogoutTime    uint64
 	IsLogout      bool
 	IsAdmin       bool
+}
+
+func IsEmpty(user UserBasics) bool {
+	if user.Username == "" && user.Password == "" {
+		return true
+	}
+	return false
 }
 
 type Product struct {
@@ -62,16 +69,19 @@ func SelectUserByUsername(username string) UserBasics {
 	utils.DB.Where("username = ?", username).First(&user)
 	return user
 }
-
-func SelectUserByEmail(email string) UserBasics {
-	user := UserBasics{}
-	utils.DB.Where("email = ?", email).First(&user)
-	return user
-}
-
 func SelectUserById(id int) UserBasics {
 	user := UserBasics{}
 	utils.DB.Where("id = ?", id).First(&user)
+	return user
+}
+func SelectUserByPhoneNum(PhoneNum string) UserBasics {
+	user := UserBasics{}
+	utils.DB.Where("phone_num = ?", PhoneNum).First(&user)
+	return user
+}
+func SelectUserByEmail(email string) UserBasics {
+	user := UserBasics{}
+	utils.DB.Where("email = ?", email).First(&user)
 	return user
 }
 
@@ -79,6 +89,8 @@ func InsertUser(user UserBasics) *gorm.DB {
 	return utils.DB.Create(&user)
 }
 
-func UpdatePassword(user UserBasics, password string) *gorm.DB {
+func UpdatePasswordByID(id int, password string) *gorm.DB {
+	user := UserBasics{}
+	utils.DB.Where("id = ?", id).First(&user)
 	return utils.DB.Model(&user).Updates(UserBasics{Password: password})
 }

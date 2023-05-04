@@ -46,6 +46,66 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/forgetPassword": {
+            "post": {
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "获取验证码后修改密码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "重复密码",
+                        "name": "rePassword",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code\", \"message\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/getCode": {
+            "post": {
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "获取验证码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code\", \"message\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/getUserList": {
             "get": {
                 "tags": [
@@ -63,7 +123,7 @@ const docTemplate = `{
             }
         },
         "/user/modifyPassword": {
-            "get": {
+            "post": {
                 "tags": [
                     "用户模块"
                 ],
@@ -71,9 +131,15 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
                         "description": "密码",
                         "name": "password",
-                        "in": "query"
+                        "in": "formData"
                     }
                 ],
                 "responses": {

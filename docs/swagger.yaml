@@ -19,6 +19,44 @@ paths:
             type: string
       tags:
       - 商品列表
+  /user/forgetPassword:
+    post:
+      parameters:
+      - description: 邮箱
+        in: formData
+        name: email
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        type: string
+      - description: 重复密码
+        in: formData
+        name: rePassword
+        type: string
+      responses:
+        "200":
+          description: code", "message"}
+          schema:
+            type: string
+      summary: 获取验证码后修改密码
+      tags:
+      - 用户模块
+  /user/getCode:
+    post:
+      parameters:
+      - description: 邮箱
+        in: formData
+        name: email
+        type: string
+      responses:
+        "200":
+          description: code", "message"}
+          schema:
+            type: string
+      summary: 获取验证码
+      tags:
+      - 用户模块
   /user/getUserList:
     get:
       responses:
@@ -30,10 +68,14 @@ paths:
       tags:
       - 用户模块
   /user/modifyPassword:
-    get:
+    post:
       parameters:
+      - description: ID
+        in: formData
+        name: id
+        type: string
       - description: 密码
-        in: query
+        in: formData
         name: password
         type: string
       responses:
