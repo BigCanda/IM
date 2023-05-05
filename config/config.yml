@@ -1,0 +1,4 @@
+app :
+  "IM"
+mysql :
+  dsn : "root:111111@tcp(localhost:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Local"

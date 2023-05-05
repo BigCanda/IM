@@ -1,0 +1,154 @@
+info:
+  contact: {}
+paths:
+  /index:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - 首页
+  /product:
+    get:
+      responses:
+        "200":
+          description: code", "message"}
+          schema:
+            type: string
+      tags:
+      - 商品列表
+  /user/deleteUser:
+    post:
+      parameters:
+      - description: ID
+        in: formData
+        name: id
+        type: string
+      responses:
+        "200":
+          description: code", "message"}
+          schema:
+            type: string
+      summary: 删除用户
+      tags:
+      - 用户模块
+  /user/forgetPassword:
+    post:
+      parameters:
+      - description: 邮箱
+        in: formData
+        name: email
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        type: string
+      - description: 重复密码
+        in: formData
+        name: rePassword
+        type: string
+      responses:
+        "200":
+          description: code", "message"}
+          schema:
+            type: string
+      summary: 获取验证码后修改密码
+      tags:
+      - 用户模块
+  /user/getCode:
+    post:
+      parameters:
+      - description: 邮箱
+        in: formData
+        name: email
+        type: string
+      responses:
+        "200":
+          description: code", "message"}
+          schema:
+            type: string
+      summary: 获取验证码
+      tags:
+      - 用户模块
+  /user/getUserList:
+    get:
+      responses:
+        "200":
+          description: code", "message"}
+          schema:
+            type: string
+      summary: 用户列表
+      tags:
+      - 用户模块
+  /user/loginWithUsername:
+    post:
+      parameters:
+      - description: 用户名
+        in: formData
+        name: username
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        type: string
+      responses:
+        "200":
+          description: code", "message"}
+          schema:
+            type: string
+      summary: 使用用户名登录
+      tags:
+      - 用户模块
+  /user/modifyPassword:
+    post:
+      parameters:
+      - description: ID
+        in: formData
+        name: id
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        type: string
+      responses:
+        "200":
+          description: code", "message"}
+          schema:
+            type: string
+      summary: 修改用户密码
+      tags:
+      - 用户模块
+  /user/register:
+    post:
+      parameters:
+      - description: 电话号码
+        in: formData
+        name: phoneNum
+        type: string
+      - description: 邮箱
+        in: formData
+        name: email
+        type: string
+      - description: 用户名
+        in: formData
+        name: username
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        type: string
+      - description: 重复密码
+        in: formData
+        name: rePassword
+        type: string
+      responses:
+        "200":
+          description: code", "message"}
+          schema:
+            type: string
+      summary: 新增用户
+      tags:
+      - 用户模块
+swagger: "2.0"
