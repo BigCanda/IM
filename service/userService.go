@@ -3,6 +3,8 @@ package service
 
 import (
 	"Im/models"
+	"Im/utils"
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -39,29 +41,40 @@ func GetProductList(c *gin.Context) {
 // Register 使用gin.Context获取JSON数据
 // @Summary 新增用户
 // @Tags 用户模块
-// @param username query string false "用户名"
-// @param password query string false "密码"
-// @param rePassword query string false "重复密码"
+// @param phoneNum formData string false "电话号码"
+// @param email formData string false "邮箱"
+// @param username formData string false "用户名"
+// @param password formData string false "密码"
+// @param rePassword formData string false "重复密码"
 // @Success 200 {string} json{"code", "message"}
-// @Router /user/register [get] 路径：/user/register 方法get
+// @Router /user/register [post] 路径：/user/register 方法post
 func Register(c *gin.Context) {
 	user := models.UserBasics{}
-	username := c.Query("username")
-	password := c.Query("password")
-	rePassword := c.Query("rePassword")
+	phoneNum := c.PostForm("phoneNum")
+	email := c.PostForm("email")
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+	rePassword := c.PostForm("rePassword")
+
+	if email == "" && phoneNum == "" {
+		c.JSON(-1, gin.H{
+			"message": "请输入邮箱或电话号码!",
+		})
+		return
+	}
 	if username == "" {
 		c.JSON(-1, gin.H{
 			"message": "请输入用户名!",
 		})
 		return
 	}
-	if c.Query("password") == "" {
+	if password == "" {
 		c.JSON(-1, gin.H{
 			"message": "请输入密码!",
 		})
 		return
 	}
-	if c.Query("rePassword") == "" {
+	if rePassword == "" {
 		c.JSON(-1, gin.H{
 			"message": "请再次输入密码!",
 		})
@@ -77,17 +90,105 @@ func Register(c *gin.Context) {
 	user = models.SelectUserByUsername(username)
 	if user.Username != "" {
 		c.JSON(-1, gin.H{
-			"message": "用户已存在!",
+			"message": "用户名已存在!",
+		})
+		return
+	}
+	user = models.SelectUserByEmail(email)
+	if user.Username != "" {
+		c.JSON(-1, gin.H{
+			"message": "该邮箱已被注册!",
+		})
+		return
+	}
+	user = models.SelectUserByPhoneNum(phoneNum)
+	if user.Username != "" {
+		c.JSON(-1, gin.H{
+			"message": "该手机号已被注册!",
 		})
 		return
 	}
 	user = models.UserBasics{}
-	user.Username = c.Query("username")
-	user.Password = password
-	models.InsertUser(user)
+	user.Username = username
+	user.Email = email
+	user.PhoneNum = phoneNum
+	user.Salt = utils.GetSalt()
+	user.Password = utils.Md5(password + user.Salt)
+
+	_, err := govalidator.ValidateStruct(user)
+	// 发邮件或者发短信
+	if err == nil {
+		models.InsertUser(user)
+		c.JSON(http.StatusOK, gin.H{
+			"message": "注册成功!",
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "请检查邮箱格式或电话号码!",
+		})
+	}
+}
+
+// LoginWithUsername 使用gin.Context获取JSON数据
+// @Summary 使用用户名登录
+// @Tags 用户模块
+// @param username formData string false "用户名"
+// @param password formData string false "密码"
+// @Success 200 {string} json{"code", "message"}
+// @Router /user/loginWithUsername [post] 路径：/user/loginWithUsername 方法post
+func LoginWithUsername(c *gin.Context) {
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+
+	if username == "" {
+		c.JSON(-1, gin.H{
+			"message": "用户名不能为空!",
+		})
+		return
+	}
+	if password == "" {
+		c.JSON(-1, gin.H{
+			"message": "密码不能为空!",
+		})
+		return
+	}
+	user := models.SelectUserByUsername(username)
+	if models.IsEmpty(user) {
+		c.JSON(-1, gin.H{
+			"message": "用户不存在!",
+		})
+		return
+	}
+	if utils.Md5(password+user.Salt) != user.Password {
+		c.JSON(-1, gin.H{
+			"message": "密码错误!",
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "用户添加成功!",
+		"message": "登录成功!",
 	})
+	// 设置登录状态
+}
+
+// DeleteUser 使用gin.Context获取JSON数据
+// @Summary 删除用户
+// @Tags 用户模块
+// @param id formData string false "ID"
+// @Success 200 {string} json{"code", "message"}
+// @Router /user/deleteUser [post] 路径：/user/deleteUser 方法post
+func DeleteUser(c *gin.Context) {
+	id, _ := strconv.Atoi(c.PostForm("id"))
+	if c.PostForm("id") != "" {
+		models.DeleteUserById(id)
+		c.JSON(http.StatusOK, gin.H{
+			"message": "用户删除成功!",
+		})
+	} else {
+		c.JSON(-1, gin.H{
+			"message": "用户删除失败,id不能为空!",
+		})
+	}
 }
 
 // ModifyPassword 使用gin.Context获取JSON数据

@@ -19,6 +19,21 @@ paths:
             type: string
       tags:
       - 商品列表
+  /user/deleteUser:
+    post:
+      parameters:
+      - description: ID
+        in: formData
+        name: id
+        type: string
+      responses:
+        "200":
+          description: code", "message"}
+          schema:
+            type: string
+      summary: 删除用户
+      tags:
+      - 用户模块
   /user/forgetPassword:
     post:
       parameters:
@@ -67,6 +82,25 @@ paths:
       summary: 用户列表
       tags:
       - 用户模块
+  /user/loginWithUsername:
+    post:
+      parameters:
+      - description: 用户名
+        in: formData
+        name: username
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        type: string
+      responses:
+        "200":
+          description: code", "message"}
+          schema:
+            type: string
+      summary: 使用用户名登录
+      tags:
+      - 用户模块
   /user/modifyPassword:
     post:
       parameters:
@@ -87,18 +121,26 @@ paths:
       tags:
       - 用户模块
   /user/register:
-    get:
+    post:
       parameters:
+      - description: 电话号码
+        in: formData
+        name: phoneNum
+        type: string
+      - description: 邮箱
+        in: formData
+        name: email
+        type: string
       - description: 用户名
-        in: query
+        in: formData
         name: username
         type: string
       - description: 密码
-        in: query
+        in: formData
         name: password
         type: string
       - description: 重复密码
-        in: query
+        in: formData
         name: rePassword
         type: string
       responses:

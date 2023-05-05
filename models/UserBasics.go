@@ -10,15 +10,17 @@ type UserBasics struct {
 	gorm.Model
 	Username      string `valid:"required"`
 	Password      string `valid:"required"`
+	Salt          string
 	PhoneNum      string `valid:"matches(^1[3-9]{1}\\d{9}$)"`
 	Email         string `valid:"email"`
-	Identity      string
+	Identity      string `valid:"unique"`
 	ClientId      string
 	ClientPort    string
 	DeviceInfo    string
 	LoginTime     uint64
 	HeartbeatTime uint64
 	LogoutTime    uint64
+	Status        bool `default:"false"`
 	IsLogout      bool
 	IsAdmin       bool
 }
@@ -93,4 +95,10 @@ func UpdatePasswordByID(id int, password string) *gorm.DB {
 	user := UserBasics{}
 	utils.DB.Where("id = ?", id).First(&user)
 	return utils.DB.Model(&user).Updates(UserBasics{Password: password})
+}
+
+func DeleteUserById(id int) *gorm.DB {
+	user := UserBasics{}
+	utils.DB.Where("id = ?", id).First(&user)
+	return utils.DB.Delete(&user)
 }

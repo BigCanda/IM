@@ -46,6 +46,30 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/deleteUser": {
+            "post": {
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "删除用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code\", \"message\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/forgetPassword": {
             "post": {
                 "tags": [
@@ -122,6 +146,36 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/loginWithUsername": {
+            "post": {
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "使用用户名登录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code\", \"message\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/modifyPassword": {
             "post": {
                 "tags": [
@@ -153,7 +207,7 @@ const docTemplate = `{
             }
         },
         "/user/register": {
-            "get": {
+            "post": {
                 "tags": [
                     "用户模块"
                 ],
@@ -161,21 +215,33 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "电话号码",
+                        "name": "phoneNum",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
                         "description": "用户名",
                         "name": "username",
-                        "in": "query"
+                        "in": "formData"
                     },
                     {
                         "type": "string",
                         "description": "密码",
                         "name": "password",
-                        "in": "query"
+                        "in": "formData"
                     },
                     {
                         "type": "string",
                         "description": "重复密码",
                         "name": "rePassword",
-                        "in": "query"
+                        "in": "formData"
                     }
                 ],
                 "responses": {

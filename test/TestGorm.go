@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Im/utils"
 	"fmt"
 	"gorm.io/gorm"
 )
@@ -72,4 +73,6 @@ func main() {
 	//}
 
 	// models.GetProductList()
+
+	fmt.Println(utils.GetSalt())
 }

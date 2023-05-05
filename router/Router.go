@@ -20,9 +20,11 @@ func Router() *gin.Engine {
 	r.GET("/index", service.GetIndex)
 	r.GET("/user/getUserList", service.GetUserList)
 	r.GET("/product", service.GetProductList)
-	r.GET("/user/register", service.Register)
+	r.POST("/user/register", service.Register)
 	r.POST("/user/modifyPassword", service.ModifyPassword)
 	r.POST("/user/getCode", service.GetCode)
 	r.POST("/user/forgetPassword", service.ForgetPassword)
+	r.POST("/user/deleteUser", service.DeleteUser)
+	r.POST("/user/loginWithUsername", service.LoginWithUsername)
 	return r
 }
