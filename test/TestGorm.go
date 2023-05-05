@@ -1,7 +1,6 @@
 package main
 
 import (
-	"Im/utils"
 	"fmt"
 	"gorm.io/gorm"
 )
@@ -48,6 +47,9 @@ func selectProductByProCode(db *gorm.DB, proCode string) Product {
 	}
 	return product
 }
+func helloGit() {
+	fmt.Println("Hello Git!")
+}
 
 func main() {
 	//dsn := "root:111111@tcp(localhost:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Local"
@@ -74,5 +76,5 @@ func main() {
 
 	// models.GetProductList()
 
-	fmt.Println(utils.GetSalt())
+	helloGit()
 }
